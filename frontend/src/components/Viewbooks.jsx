@@ -21,7 +21,7 @@ function ViewBooks() {
     const fetchBooks = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:5000/api/book?page=${page}&limit=10`);
+            const response = await axios.get(`https://librarary-management-system.onrender.com/api/book?page=${page}&limit=10`);
             if (page === 1) {
                 setBooks(response.data.slice(0, 10)); // Slice the response to get the first 10 records
             } else {
