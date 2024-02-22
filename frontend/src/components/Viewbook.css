@@ -1,0 +1,28 @@
+.container {
+    margin: 20px;
+    padding-left: 50px;
+}
+
+.book-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.book-table th, .book-table td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.book-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+    font-weight: bold;
+}
+
+.book-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.book-table tbody tr:hover {
+    background-color: #ddd;
+}
