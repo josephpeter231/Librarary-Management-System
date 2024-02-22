@@ -54,39 +54,37 @@ function ViewBooks() {
     };
 
     return (
-        <div>
+        <div className="container mt-4">
             <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
                 <div className="container-fluid">
                     <span className="navbar-brand mb-0 h1">Library Management System</span>
                 </div>
             </nav>
-            <div className="container mt-4">
-                <div className="card">
-                    <h2 className="card-header bg-info text-white">View Books</h2>
-                    <div className="card-body">
-                        <table className="table table-striped">
-                            <thead className="table-dark">
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Author</th>
-                                    <th>Publication Date</th>
-                                    <th>Subject</th>
+            <div className="card mt-4">
+                <h2 className="card-header bg-info text-white">View Books</h2>
+                <div className="card-body">
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Publication Date</th>
+                                <th>Subject</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {books.map(book => (
+                                <tr key={book.id}>
+                                    <td>{book.title}</td>
+                                    <td>{book.author}</td>
+                                    <td>{formatDate(book.publication_date)}</td>
+                                    <td>{book.subject}</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {books.map(book => (
-                                    <tr key={book.id}>
-                                        <td>{book.title}</td>
-                                        <td>{book.author}</td>
-                                        <td>{formatDate(book.publication_date)}</td>
-                                        <td>{book.subject}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        {loading && <p>Loading...</p>}
-                        <button onClick={loadMore} className="btn btn-primary mt-3">Load More</button>
-                    </div>
+                            ))}
+                        </tbody>
+                    </table>
+                    {loading && <p>Loading...</p>}
+                    <button onClick={loadMore} className="btn btn-primary mt-3">Load More</button>
                 </div>
             </div>
         </div>

@@ -1,28 +1,45 @@
-.container {
-    margin: 20px;
-    padding-left: 50px;
-}
+/* ViewBooks.css */
 
-.book-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.book-table th, .book-table td {
-    padding: 8px;
-    border-bottom: 1px solid #ddd;
-}
-
-.book-table th {
+.view-books-container {
     background-color: #f2f2f2;
-    text-align: left;
-    font-weight: bold;
+    min-height: 100vh;
+    padding-bottom: 50px;
 }
 
-.book-table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
+.card {
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.book-table tbody tr:hover {
-    background-color: #ddd;
+.card-header {
+    border-radius: 10px 10px 0 0;
+}
+
+.table th,
+.table td {
+    font-size: 16px;
+    vertical-align: middle;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-primary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #fff;
 }
