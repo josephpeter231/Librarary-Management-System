@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function formatDate(dateString) {
@@ -12,20 +12,26 @@ function formatDate(dateString) {
 function ViewBooks() {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [page, setPage] = useState(1); // Change initial page to 1
+    const [page, setPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filters, setFilters] = useState({
+        title: '',
+        author: '',
+        subject: ''
+    });
 
     useEffect(() => {
         fetchBooks();
-    }, [page]);
+    }, [page, filters]);
 
     const fetchBooks = async () => {
         setLoading(true);
         try {
             const response = await axios.get(`https://librarary-management-system.onrender.com/api/book?page=${page}&limit=10`);
             if (page === 1) {
-                setBooks(response.data.slice(0, 10)); // Slice the response to get the first 10 records
+                setBooks(response.data.slice(0, 10));
             } else {
-                setBooks(prevBooks => [...prevBooks, ...response.data]); // Append additional records for pagination
+                setBooks(prevBooks => [...prevBooks, ...response.data]);
             }
         } catch (error) {
             console.error('Error fetching books:', error);
@@ -53,6 +59,26 @@ function ViewBooks() {
         setPage(prevPage => prevPage + 1);
     };
 
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            [name]: value
+        }));
+    };
+
+    const filteredBooks = books.filter(book => {
+        return (
+            book.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            book.author.toLowerCase().includes(filters.author.toLowerCase()) &&
+            book.subject.toLowerCase().includes(filters.subject.toLowerCase())
+        );
+    });
+
     return (
         <div className="container mt-4">
             <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -63,6 +89,15 @@ function ViewBooks() {
             <div className="card mt-4">
                 <h2 className="card-header bg-info text-white">View Books</h2>
                 <div className="card-body">
+                    <div className="mb-3">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search by title"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                        />
+                    </div>
                     <table className="table table-striped">
                         <thead>
                             <tr>
@@ -73,7 +108,7 @@ function ViewBooks() {
                             </tr>
                         </thead>
                         <tbody>
-                            {books.map(book => (
+                            {filteredBooks.map(book => (
                                 <tr key={book.id}>
                                     <td>{book.title}</td>
                                     <td>{book.author}</td>
