@@ -13,15 +13,23 @@ function ViewBooks() {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1); // Change initial page to 1
+    const [filters, setFilters] = useState({
+        title: '',
+        author: '',
+        publication_date: '',
+        subject: ''
+    });
 
     useEffect(() => {
         fetchBooks();
-    }, [page]);
+    }, [page, filters]);
 
     const fetchBooks = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`https://librarary-management-system.onrender.com/api/book?page=${page}&limit=10`);
+            const response = await axios.get(`http://localhost:5000/api/book?page=${page}&limit=10`, {
+                params: filters
+            });
             if (page === 1) {
                 setBooks(response.data.slice(0, 10)); // Slice the response to get the first 10 records
             } else {
@@ -31,6 +39,20 @@ function ViewBooks() {
             console.error('Error fetching books:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            [name]: value
+        }));
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            fetchBooks(); // Trigger search when Enter key is pressed
         }
     };
 
@@ -54,37 +76,87 @@ function ViewBooks() {
     };
 
     return (
-        <div className="container mt-4">
-            <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-                <div className="container-fluid">
-                    <span className="navbar-brand mb-0 h1">Library Management System</span>
+        <div className="container">
+            <div className="my-4">
+                <h1 className="text-center">Library Management System</h1>
+                <div className="row justify-content-center">
+                    <div className="col-md-6">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search Title"
+                            name="title"
+                            value={filters.title}
+                            onChange={handleInputChange}
+                            onKeyDown={handleKeyDown}
+                        />
+                    </div>
+                    <div className="col-md-6">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search Author"
+                            name="author"
+                            value={filters.author}
+                            onChange={handleInputChange}
+                            onKeyDown={handleKeyDown}
+                        />
+                    </div>
+                    <div className="col-md-6">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search Publication Date"
+                            name="publication_date"
+                            value={filters.publication_date}
+                            onChange={handleInputChange}
+                            onKeyDown={handleKeyDown}
+                        />
+                    </div>
+                    <div className="col-md-6">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search Subject"
+                            name="subject"
+                            value={filters.subject}
+                            onChange={handleInputChange}
+                            onKeyDown={handleKeyDown}
+                        />
+                    </div>
                 </div>
-            </nav>
-            <div className="card mt-4">
-                <h2 className="card-header bg-info text-white">View Books</h2>
-                <div className="card-body">
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Author</th>
-                                <th>Publication Date</th>
-                                <th>Subject</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {books.map(book => (
-                                <tr key={book.id}>
-                                    <td>{book.title}</td>
-                                    <td>{book.author}</td>
-                                    <td>{formatDate(book.publication_date)}</td>
-                                    <td>{book.subject}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                    {loading && <p>Loading...</p>}
-                    <button onClick={loadMore} className="btn btn-primary mt-3">Load More</button>
+            </div>
+            <div className="row justify-content-center">
+                <div className="col-md-8">
+                    <div className="card">
+                        <div className="card-header">
+                            <h2 className="card-title">View Books</h2>
+                        </div>
+                        <div className="card-body">
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Publication Date</th>
+                                        <th>Subject</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {books.map(book => (
+                                        <tr key={book.id}>
+                                            <td>{book.title}</td>
+                                            <td>{book.author}</td>
+                                            <td>{formatDate(book.publication_date)}</td>
+                                            <td>{book.subject}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            {loading && <p>Loading...</p>}
+                            <button className="btn btn-primary" onClick={loadMore}>Load More</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
